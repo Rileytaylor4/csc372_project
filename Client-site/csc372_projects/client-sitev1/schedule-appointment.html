@@ -1,9 +1,15 @@
+<!-- =========================
+Name: Riley C. Taylor
+Date: 2026-02-13
+FILE: schedule-appointment.html
+Schedule appointment tab. Contains basic contact info for Forge and Fender, will most likely be updated later
+========================= -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Forge & Fender Mobile Auto Works</title>
+  <title>Schedule Appointment | Forge & Fender Mobile Auto Works</title>
 
   <style>
     @font-face {
@@ -118,7 +124,6 @@
       letter-spacing: 0.2px;
       white-space: nowrap;
     }
-    
 
     nav ul{
       list-style: none;
@@ -140,7 +145,7 @@
 
     nav a:hover{
       background: rgba(255,255,255,0.06);
-    } 
+    }
 
     main{
       flex: 1;
@@ -149,73 +154,6 @@
       padding: 80px 18px 60px;
       display: flex;
       justify-content: center;
-    }
-
-    .center-logo{
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .center-logo img{
-      height: 260px;
-      width: auto;
-      display: inline-block;
-    }
-
-    /* review section*/
-    .reviews{
-      max-width: 980px;
-      width: 100%;
-      margin: 0 auto 36px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .review-card{
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: rgba(16, 16, 20, 0.45);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.28);
-      overflow: hidden;
-    }
-
-    .review-card img{
-      width: 100%;
-      height: 190px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .review-body{
-      padding: 16px 16px 18px;
-    }
-
-    .stars{
-      font-size: 16px;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
-      color: rgba(255,255,255,0.92);
-      user-select: none;
-    }
-
-    .review-name{
-      font-weight: 700;
-      margin: 0 0 8px;
-      font-size: 16px;
-    }
-
-    .review-text{
-      margin: 0;
-      color: var(--muted);
-      font-size: 14.5px;
-      line-height: 1.55;
-    }
-
-    /* stack cards */
-    @media (max-width: 980px){
-      .reviews{ grid-template-columns: 1fr; }
-      .review-card img{ height: 220px; }
     }
 
     .hero{
@@ -237,6 +175,7 @@
     .mission{
       font-size: 16px;
       margin: 0;
+      color: var(--muted);
     }
 
     footer{
@@ -257,73 +196,22 @@
         <div class="brand-title">Forge &amp; Fender Mobile Auto Works</div>
         <nav>
           <ul>
-            <li><a href="#">Schedule Appointment</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Get a Quote</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="schedule-appointment.html">Schedule Appointment</a></li>
+            <li><a href="./services.html">Services</a></li>
+            <li><a href="vin-checker.html">Recall Checker</a></li>
           </ul>
         </nav>
       </div>
     </header>
 
     <main>
-      <div>
-        <div class="center-logo">
-          <img src="logo transparent bg.png" alt="Forge & Fender Logo">
-        </div>
-
-        <!-- reviews -->
-        <section class="reviews" aria-label="Customer Reviews">
-          <!-- mustang Review -->
-          <article class="review-card">
-            <img src="mustang_review.jpg" alt="Mustang review photo">
-            <div class="review-body">
-              <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <p class="review-name">Riley Taylor</p>
-              <p class="review-text">
-                I called Forge &amp; Fender for a tire change and they responded unbelievably fast. The service was smooth, professional, and had me back on the road way quicker than I expected.
-              </p>
-            </div>
-          </article>
-
-          <!-- ram review -->
-          <article class="review-card">
-            <img src="ram_review.jpeg" alt="RAM review photo">
-            <div class="review-body">
-              <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <p class="review-name">Max Maldonado</p>
-              <p class="review-text">
-                I used Forge &amp; Fender for an at-home brake pad change and the work was done perfectly. Everything felt solid afterward and the whole process was straightforward and stress-free.
-              </p>
-            </div>
-          </article>
-
-          <!-- TRX and hellcat review -->
-          <article class="review-card">
-            <img src="trx-hellcat_review.jpeg" alt="TRX and Hellcat review photo">
-            <div class="review-body">
-              <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <p class="review-name">Lukas Blume</p>
-              <p class="review-text">
-                Forge &amp; Fender came right to my house and took care of an oil change and tire rotation for both my TRX and my Hellcat. The work was clean, careful, and clearly done by someone who knows what they’re doing. I’ll 100% be calling them again because the convenience and quality were top-tier.
-              </p>
-            </div>
-          </article>
-        </section>
-
-        <section class="hero">
-          <h1>Mission Statement:</h1>
-          <p class="mission">
-            At Forge &amp; Fender Mobile Auto Works, our mission is to bring honest, skilled automotive care directly to your driveway.
-            Founded by a Universal Technical Institute Graduate, we exist to serve people who value their time, mobility, and peace of mind.
-            Whether that means busy professionals, families, or seniors who deserve dependable service without the hassle of a traditional shop.
-            We combine old school workmanship with modern convenience, delivering reliable at home maintenance you can trust, clear communication
-            you can rely on, and service done right the first time. When you choose Forge &amp; Fender, you are choosing craftsmanship,
-            accountability, and a mechanic who comes to you because your time matters.
-          </p>
-
-
-        </section>
-      </div>
+      <section class="hero" aria-label="Contact Info">
+        <h1>Contact Info</h1>
+        <p class="mission">
+          If you wish to inquire about scheduling appointments, reach out to 973 534 3302.
+        </p>
+      </section>
     </main>
 
     <footer>
