@@ -1,0 +1,184 @@
+<div class="starfield"></div>
+
+<div class="wrap">
+  <main>
+    <section class="hero" aria-labelledby="vinTitle">
+      <h1 id="vinTitle">Recall &amp; VIN Checker</h1>
+      <p class="mission">
+        Enter your VIN to view basic vehicle details and any matching recall information.
+      </p>
+
+      <form id="vinForm">
+        <label for="vinInput">VIN (17 characters)</label>
+        <div class="vin-row">
+          <input
+            id="vinInput"
+            name="vin"
+            type="text"
+            minlength="17"
+            maxlength="17"
+            autocomplete="off"
+            placeholder="e.g., 1HGCM82633A123456"
+            required
+          />
+          <button id="vinBtn" type="submit">Check</button>
+        </div>
+        <p class="help-text">
+          We use a public vehicle/recall API to return results. If the service is unavailable, try again later.
+        </p>
+      </form>
+
+      <div id="vinStatus" class="status" role="status" aria-live="polite"></div>
+      <div id="vinResults"></div>
+
+      <!-- api key placeholder -->
+    </section>
+  </main>
+</div>
+
+<script>
+  /* API INTEGRATION Uses NHTSA vPIC (VIN decode) + NHTSA recallsByVehicle */
+
+  const vinForm = document.getElementById("vinForm");
+  const vinInput = document.getElementById("vinInput");
+  const vinBtn = document.getElementById("vinBtn");
+  const vinStatus = document.getElementById("vinStatus");
+  const vinResults = document.getElementById("vinResults");
+
+  function setStatus(message, isError = false) {
+    vinStatus.textContent = message;
+    vinStatus.className = isError ? "status error" : "status";
+  }
+
+  function setLoading(isLoading) {
+    vinBtn.disabled = isLoading;
+    vinInput.disabled = isLoading;
+  }
+
+  function renderVehicle(vehicle) {
+    return `
+      <div class="card">
+        <h3>Vehicle Details</h3>
+        <ul>
+          <li><strong>Year:</strong> ${vehicle.year ?? "N/A"}</li>
+          <li><strong>Make:</strong> ${vehicle.make ?? "N/A"}</li>
+          <li><strong>Model:</strong> ${vehicle.model ?? "N/A"}</li>
+        </ul>
+      </div>
+    `;
+  }
+
+  function renderRecalls(recalls) {
+    if (!recalls || recalls.length === 0) {
+      return `
+        <div class="card">
+          <h3>Recalls</h3>
+          <p class="help-text">No recalls found for the provided vehicle info.</p>
+        </div>
+      `;
+    }
+
+    const items = recalls
+      .map((r) => {
+        const campaign = r.NHTSACampaignNumber || "N/A";
+        const date = r.ReportReceivedDate || "N/A";
+        const component = r.Component || "N/A";
+        const summary = r.Summary || "No summary provided.";
+        const remedy = r.Remedy || "No remedy info provided.";
+
+        return `
+          <li class="recall-item">
+            <p><strong>Campaign:</strong> ${campaign}</p>
+            <p><strong>Date:</strong> ${date}</p>
+            <p><strong>Component:</strong> ${component}</p>
+            <p><strong>Summary:</strong> ${summary}</p>
+            <p><strong>Remedy:</strong> ${remedy}</p>
+          </li>
+        `;
+      })
+      .join("");
+
+    return `
+      <div class="card">
+        <h3>Recalls (${recalls.length})</h3>
+        <ul>${items}</ul>
+      </div>
+    `;
+  }
+
+  function isValidVin(vin) {
+    if (vin.length !== 17) return false;
+    return !/[IOQ]/.test(vin);
+  }
+
+  async function decodeVin(vin) {
+    const url = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${encodeURIComponent(
+      vin
+    )}?format=json`;
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("VIN decode request failed.");
+    const data = await res.json();
+
+    const row = data?.Results?.[0] || {};
+    return {
+      year: row.ModelYear || null,
+      make: row.Make || null,
+      model: row.Model || null,
+      vin: row.VIN || vin
+    };
+  }
+
+  async function fetchRecallsByVehicle(year, make, model) {
+    const url = `https://api.nhtsa.gov/recalls/recallsByVehicle?make=${encodeURIComponent(
+      make
+    )}&model=${encodeURIComponent(model)}&modelYear=${encodeURIComponent(year)}`;
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Recall lookup request failed.");
+    const data = await res.json();
+
+    return data?.results || [];
+  }
+
+  vinForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const vin = vinInput.value.trim().toUpperCase();
+    vinResults.innerHTML = "";
+
+    if (!isValidVin(vin)) {
+      setStatus("Please enter a valid 17-character VIN (no I, O, or Q).", true);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setStatus("Loading vehicle info and recalls...");
+
+      const vehicle = await decodeVin(vin);
+
+      if (!vehicle.year || !vehicle.make || !vehicle.model) {
+        setStatus("We couldn’t decode that VIN. Double-check it and try again.", true);
+        return;
+      }
+
+      const recalls = await fetchRecallsByVehicle(vehicle.year, vehicle.make, vehicle.model);
+
+      vinResults.innerHTML = `
+        ${renderVehicle(vehicle)}
+        ${renderRecalls(recalls)}
+      `;
+
+      setStatus("Done.");
+    } catch (err) {
+      setStatus("Something went wrong while contacting the API. Please try again.", true);
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  /* =========================
+     API INTEGRATION END
+     ========================= */
+</script>
