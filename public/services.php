@@ -18,7 +18,7 @@ Description:
 This file displays the services offered with a description and image.
 It has been updated to use PHP objects for Assignment 6.
 
-AI was used to help organize the class structure and object output.
+AI was used to make the descriptions for the services so they had better explanations 
 */
 
 /*
@@ -453,7 +453,7 @@ $services = [
         <nav>
           <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="schedule-appointment.html">Schedule Appointment</a></li>
+            <li><a href="appointment.php">Schedule Appointment</a></li>
             <li><a href="./services.php">Services</a></li>
             <li><a href="vin-checker.html">Recall Checker</a></li>
           </ul>
