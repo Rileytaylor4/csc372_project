@@ -16,7 +16,7 @@ function Home() {
       />
 
       <img
-        src="/logo transparent bg.png"
+        src={`${import.meta.env.BASE_URL}logo transparent bg.png`}
         alt="Forge & Fender Logo"
         className="home-logo"
       />
